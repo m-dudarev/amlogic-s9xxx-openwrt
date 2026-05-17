@@ -21,20 +21,19 @@ on:
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "all"
+        default: "s905x3-x96max"
         type: choice
         options:
           - all
-          - allwinner
           - amlogic
           - rockchip
+          - allwinner
           - rockchip50
           - rockchip50_100
-          - rockchip100_150
           - first50
           - range50_100
           - range100_150
-          - last50
+          - last20
           - a311d-oes_s922x-oes-plus_wxy-oect
           - nsy-g16-plus_nsy-g68-plus_bdy-g18-pro
           - s905d_s905x3_s912_s922x-ct2000
@@ -94,7 +93,6 @@ on:
           - leez
           - lubancat-1
           - lubancat-2
-          - lubancat-4
           - lx-r3s
           - lyt-t68m
           - lz-d3568
@@ -242,7 +240,7 @@ on:
       openwrt_kernel:
         description: "Select kernel version"
         required: false
-        default: "6.12.y_6.18.y"
+        default: "6.18.y"
         type: choice
         options:
           - 5.10.y
@@ -280,7 +278,7 @@ on:
       openwrt_ip:
         description: "Set OpenWrt default IP address."
         required: false
-        default: "192.168.1.1"
+        default: "192.168.10.1"
       use_ccache:
         description: "Auto use ccache."
         required: false
@@ -297,7 +295,7 @@ on:
       builder_name:
         description: "Set OpenWrt builder signature."
         required: false
-        default: "ophub"
+        default: "yourname"
         type: choice
         options:
           - ophub
@@ -486,16 +484,16 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Upload OpenWrt rootfs to Release
-        uses: ophub/upload-to-releases@main
+        uses: ncipollo/release-action@main
         if: ${{ steps.clean.outputs.status == 'success' && !cancelled() }}
         with:
           tag: ${{ env.build_tag }}
           artifacts: openwrt/output/*
-          allow_updates: true
-          remove_artifacts: false
-          replaces_artifacts: true
-          make_latest: true
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          makeLatest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Package OpenWrt for target boards
         if: ${{ steps.clean.outputs.status == 'success' && !cancelled() }}
@@ -511,21 +509,21 @@ jobs:
           builder_name: ${{ inputs.builder_name }}
 
       - name: Upload packaged OpenWrt to Release
-        uses: ophub/upload-to-releases@main
+        uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS == 'success' && !cancelled() }}
         with:
           tag: ${{ env.build_tag }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-          allow_updates: true
-          remove_artifacts: false
-          replaces_artifacts: true
-          make_latest: true
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          makeLatest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             ### OpenWrt Image Information
-            - Default IP: `192.168.1.1`
+            - Default IP: `192.168.10.1`
             - Default username: `root`
-            - Default password: `password`
+            - Default password: `***`
             - Default WIFI name: `OpenWrt`
             - Default WIFI password: `none`
             ### Install to EMMC
