@@ -300,7 +300,7 @@ on:
           - yourname
 
 env:
-  TZ: Etc/Europe/Moscow
+  TZ: Etc/UTC
 
 jobs:
   build:
@@ -330,7 +330,7 @@ jobs:
           sudo -E apt-get clean
           sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
           sudo rm -rf ~/{.cargo,.dotnet,.rustup}
-          sudo -E timedatectl set-timezone "${TZ:-Etc/Europe/Moscow}"
+          sudo -E timedatectl set-timezone "${TZ:-Etc/UTC}"
           sudo -E ntpdate ntp.ubuntu.com 0.pool.ntp.org || true
           sudo -E timedatectl set-ntp true
           date -u
