@@ -21,7 +21,7 @@ on:
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "s905x3-x96max"
+        default: "tanix-tx6"
         type: choice
         options:
           - all
