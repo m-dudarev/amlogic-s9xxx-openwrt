@@ -300,7 +300,7 @@ on:
           - yourname
 
 env:
-  TZ: Etc/UTC
+  TZ: Etc/MSK-3
 
 jobs:
   build:
