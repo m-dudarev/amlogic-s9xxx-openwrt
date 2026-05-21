@@ -300,7 +300,7 @@ on:
           - yourname
 
 env:
-  TZ: Etc/MSK-3
+  TZ: Etc/Europe/Moscow
 
 jobs:
   build:
