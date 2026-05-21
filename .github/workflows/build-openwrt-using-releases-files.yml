@@ -301,6 +301,7 @@ on:
 
 env:
   TZ: Etc/UTC
+  DIY_P2_SH: config/${{ inputs.source_branch }}/diy-part2.sh
 
 jobs:
   build:
