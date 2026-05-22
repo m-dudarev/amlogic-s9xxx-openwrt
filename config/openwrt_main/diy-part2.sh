@@ -25,28 +25,6 @@ ip_regex="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01
 
 # Set the default password for the 'root' user (change empty password to 'my password')
 sed -i 's/root.*/root:$5$N3KDjhDeMwfZ9KZ6$nLGdY9PNasGyFLPc.7YLYtuYAONkq.8ll7ySqX3cj3C:20531:0:99999:7:::/' package/base-files/files/etc/shadow
-# Time zone Moscow
-# creat etc/config/system/TZ
-echo MSK-3 > package/base-files/files/tmp/TZ
-# creat etc/config/system
-cat <<"EOF" > package/base-files/files/etc/config/system
-config system
-	option hostname 'OpenWrt'
-	option timezone 'MSK-3'
-	option zonename 'Europe/Moscow'
-	option ttylogin '0'
-	option log_size '128'
-	option urandom_seed '0'
-	option log_proto 'udp'
-	option conloglevel '8'
-	option cronloglevel '7'
-
-config timeserver 'ntp'
-	list server '0.openwrt.pool.ntp.org'
-	list server '1.openwrt.pool.ntp.org'
-	list server '2.openwrt.pool.ntp.org'
-	list server '3.openwrt.pool.ntp.org'
-EOF
 
 # Append source repository information to etc/openwrt_release
 sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package/base-files/files/etc/openwrt_release
