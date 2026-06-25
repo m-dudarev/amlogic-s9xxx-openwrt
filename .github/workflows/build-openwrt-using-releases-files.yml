@@ -12,7 +12,7 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "all"
+        default: "openwrt_main"
         type: choice
         options:
           - all
@@ -252,7 +252,7 @@ on:
       openwrt_kernel:
         description: "Select kernel version"
         required: false
-        default: "6.12.y_6.18.y"
+        default: "6.18.y"
         type: choice
         options:
           - 5.10.y
@@ -290,7 +290,7 @@ on:
       openwrt_ip:
         description: "Set OpenWrt default IP address."
         required: false
-        default: "192.168.1.1"
+        default: "192.168.10.1"
       openwrt_storage:
         description: "Select image storage type."
         required: false
@@ -302,7 +302,7 @@ on:
       builder_name:
         description: "Set OpenWrt builder signature."
         required: false
-        default: "ophub"
+        default: "yourname"
         type: choice
         options:
           - ophub
@@ -480,9 +480,9 @@ jobs:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             ### OpenWrt Image Information
-            - Default IP: `192.168.1.1`
+            - Default IP: `192.168.10.1`
             - Default username: `root`
-            - Default password: `password`
+            - Default password: `***`
             - Default WIFI name: `OpenWrt`
             - Default WIFI password: `none`
             ### Install to EMMC
