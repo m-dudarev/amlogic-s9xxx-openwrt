@@ -3325,10 +3325,10 @@ CONFIG_PACKAGE_kmod-mt76x2u=y
 # CONFIG_PACKAGE_kmod-mt7915-firmware is not set
 CONFIG_PACKAGE_kmod-mt7915e=y
 CONFIG_PACKAGE_kmod-mt7916-firmware=y
-# CONFIG_PACKAGE_kmod-mt7921-firmware is not set
+CONFIG_PACKAGE_kmod-mt7921-firmware=yes
 # CONFIG_PACKAGE_kmod-mt7921e is not set
 # CONFIG_PACKAGE_kmod-mt7921s is not set
-# CONFIG_PACKAGE_kmod-mt7921u is not set
+CONFIG_PACKAGE_kmod-mt7921u=y
 # CONFIG_PACKAGE_kmod-mt7922-firmware is not set
 CONFIG_PACKAGE_kmod-mt7925-common=y
 CONFIG_PACKAGE_kmod-mt7925-firmware=y
