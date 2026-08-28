@@ -12,7 +12,7 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "all"
+        default: "openwrt_main"
         type: choice
         options:
           - all
@@ -22,7 +22,7 @@ on:
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "all"
+        default: "tanix-tx6"
         type: choice
         options:
           - all
@@ -37,7 +37,7 @@ on:
           - range100_150
           - last50
           - a311d-oes_s922x-oes-plus_wxy-oect
-          - nsy-g16-plus_nsy-g68-plus_bdy-g18-pro_bdy-g98
+          - nsy-g16-plus_nsy-g68-plus_bdy-g18-pro
           - s905d_s905x3_s912_s922x-ct2000
           - a311d
           - a311d-oes
@@ -48,7 +48,6 @@ on:
           - aio-3399c-ai
           - bdkj-bd-one
           - bdy-g18-pro
-          - bdy-g98
           - beikeyun
           - boca-tcn100
           - boca-tcn200
@@ -68,7 +67,6 @@ on:
           - eaidk-610
           - easepi-a2
           - easepi-r2
-          - elfboard-elf2
           - emb3531
           - fine3399
           - firefly-itx-3588j
@@ -80,7 +78,6 @@ on:
           - gzpeite-p01
           - h28k
           - h339pc
-          - h618-ai-douhe
           - h618-devboard
           - h66k
           - h68k
@@ -89,7 +86,6 @@ on:
           - h88k-v3
           - h96-max-m2
           - hk1-rbox-k8s
-          - houzzkit-f1
           - hs530r
           - ht2
           - hugsun-x99
@@ -103,7 +99,6 @@ on:
           - leez
           - lubancat-1
           - lubancat-2
-          - lubancat-3
           - lubancat-4
           - lx-r3s
           - lyt-t68m
@@ -117,22 +112,18 @@ on:
           - nanopi-m5
           - nanopi-r5c
           - nanopi-r5s
-          - nanopi-som
           - nsy-g16-plus
           - nsy-g68-plus
           - orangepi-3b
           - orangepi-5-plus
           - orangepi-5-pro
-          - orangepi-5-ultra
           - orangepi-5b
           - orangepi-zero3
           - painet-p3
-          - painet-p5
           - panther-x2
           - photonicat
           - r66s
           - r68s
-          - recomputer-rk3576-devkit
           - renegade-rk3328
           - rk3318-box
           - roceos-k40pro
@@ -253,13 +244,9 @@ on:
           - wocyber-a3
           - wxy-oect
           - wxy-oect-mod
-          - x88pro13
           - x88pro20
           - x98h
           - xiaobao
-          - youyeetoo-r1-v3
-          - youyeetoo-yy3568
-          - youyeetoo-yy3588
           - yskj
           - zcube1-max
           - zk-r39a
@@ -267,7 +254,7 @@ on:
       openwrt_kernel:
         description: "Select kernel version"
         required: false
-        default: "6.12.y_6.18.y"
+        default: "6.18.y"
         type: choice
         options:
           - 5.10.y
@@ -305,7 +292,7 @@ on:
       openwrt_ip:
         description: "Set OpenWrt default IP address."
         required: false
-        default: "192.168.1.1"
+        default: "192.168.10.1"
       use_ccache:
         description: "Auto use ccache."
         required: false
@@ -322,7 +309,7 @@ on:
       builder_name:
         description: "Set OpenWrt builder signature."
         required: false
-        default: "ophub"
+        default: "yourname"
         type: choice
         options:
           - ophub
@@ -384,18 +371,19 @@ jobs:
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android 2>/dev/null
           sudo swapoff -a
           sudo rm -f /swapfile /mnt/swapfile
-          sudo apt-get -y update
-          sudo apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
-          sudo apt-get -y install $(curl -fsSL https://ophub.org/ubuntu2404-make-openwrt-depends)
-          sudo systemctl daemon-reload
-          #sudo apt-get -y full-upgrade
-          sudo apt-get -y autoremove --purge
-          sudo apt-get clean
+	    sudo apt-get clean
+	    sudo -E apt-get -y update
+          sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
+          sudo -E apt-get -y install $(curl -fsSL https://ophub.org/ubuntu2404-make-openwrt-depends)
+          sudo -E systemctl daemon-reload
+          #sudo -E apt-get -y full-upgrade
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
           sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
           sudo rm -rf ~/{.cargo,.dotnet,.rustup}
-          sudo timedatectl set-timezone "${TZ:-Etc/UTC}"
-          sudo ntpdate ntp.ubuntu.com 0.pool.ntp.org || true
-          sudo timedatectl set-ntp true
+          udo -E timedatectl set-timezone "${TZ:-Etc/UTC}"
+          sudo -E ntpdate ntp.ubuntu.com 0.pool.ntp.org || true
+          sudo -E timedatectl set-ntp true
           date -u
           timedatectl status || true
           echo "status=success" >> ${GITHUB_OUTPUT}
@@ -528,8 +516,7 @@ jobs:
           # Clean up build artifacts and reclaim disk space
           cd openwrt/
           [[ -d "output" ]] || mkdir output
-          ls -alh bin/targets/*/*/* || true
-          cp -f bin/targets/*/*/*-generic-rootfs.tar.gz output/
+          cp -f bin/targets/*/*/*rootfs.tar.gz output/
           cp -f .config output/config
           ls -A | grep -vE '^(output|\.ccache)$' | xargs rm -rf || true
 
@@ -575,9 +562,9 @@ jobs:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             ### OpenWrt Image Information
-            - Default IP: `192.168.1.1`
+            - Default IP: `192.168.10.1`
             - Default username: `root`
-            - Default password: `password`
+            - Default password: `***`
             - Default WIFI name: `OpenWrt`
             - Default WIFI password: `none`
             ### Install to EMMC
