@@ -18,7 +18,13 @@ ip_regex="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01
 }
 
 # Set the default password for the 'root' user (change empty password to 'password')
-sed -i 's/root:::0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.::0:99999:7:::/g' package/base-files/files/etc/shadow
+# sed -i 's/root:::0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.::0:99999:7:::/g' package/base-files/files/etc/shadow
+
+# Set the default password for the 'root' user (change empty password to 'clear password')
+# sed -i 's/root.*/root:::0:99999:7:::/' package/base-files/files/etc/shadow
+
+# Set the default password for the 'root' user (change empty password to 'my password')
+sed -i 's/root.*/root:$5$N3KDjhDeMwfZ9KZ6$nLGdY9PNasGyFLPc.7YLYtuYAONkq.8ll7ySqX3cj3C:20531:0:99999:7:::/' package/base-files/files/etc/shadow
 
 # Append source repository information to etc/openwrt_release
 sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package/base-files/files/etc/openwrt_release
